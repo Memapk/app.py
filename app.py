@@ -10,7 +10,7 @@ app = Flask(__name__)
 # BURAYI KENDİNE GÖRE DEĞİŞTİR
 # =========================
 
-MARKET_ADI = "INSTA"
+MARKET_ADI = "INSTAGRAM"
 
 GMAIL_GONDEREN = os.environ.get("memoapk7@gmail.com")       # Render environment variable
 GMAIL_APP_SIFRE = os.environ.get("dtvsvgemvslqijle")      # Render environment variable
